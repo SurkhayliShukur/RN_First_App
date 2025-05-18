@@ -4,7 +4,8 @@ import {SafeAreaView} from 'react-native';
 // import ProfileScreen from './src/screens/ProfileScreen';
 // import UserForm from './src/screens/UserForm';
 // import {ProfileList} from './src/screens/ProfileList';
-import QuestionList from './src/screens/QuestionList';
+// import QuestionList from './src/screens/QuestionList';
+import GameList from './src/screens/GameList';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
@@ -23,7 +24,8 @@ function App(): React.JSX.Element {
       {/* <UserForm /> */}
       {/* <UserForm /> */}
       {/* <ProfileList /> */}
-      <QuestionList />
+      {/* <QuestionList /> */}
+      <GameList />
     </SafeAreaView>
   );
 }

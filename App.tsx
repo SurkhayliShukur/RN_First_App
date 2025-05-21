@@ -1,16 +1,10 @@
-import React, {useState} from 'react';
-import {SafeAreaView} from 'react-native';
-
-// import ProfileScreen from './src/screens/ProfileScreen';
-// import UserForm from './src/screens/UserForm';
-// import {ProfileList} from './src/screens/ProfileList';
-// import QuestionList from './src/screens/QuestionList';
+import React from 'react';
+import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
 import GameList from './src/screens/GameList';
-
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 function App(): React.JSX.Element {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -19,12 +13,10 @@ function App(): React.JSX.Element {
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      {/* <ProfileScreen backgroundStyle={backgroundStyle} /> */}
-
-      {/* <UserForm /> */}
-      {/* <UserForm /> */}
-      {/* <ProfileList /> */}
-      {/* <QuestionList /> */}
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
+      />
       <GameList />
     </SafeAreaView>
   );

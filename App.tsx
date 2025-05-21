@@ -1,6 +1,6 @@
 import React from 'react';
 import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
-import GameList from './src/screens/GameList';
+import TodoApp from './src/components/TodoApp';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 function App(): React.JSX.Element {
@@ -17,7 +17,7 @@ function App(): React.JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <GameList />
+      <TodoApp />
     </SafeAreaView>
   );
 }

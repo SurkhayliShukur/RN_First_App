@@ -4,6 +4,7 @@ import TodoApp from './src/components/TodoApp';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 function App(): React.JSX.Element {
+  
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {

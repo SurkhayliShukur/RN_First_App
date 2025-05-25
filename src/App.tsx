@@ -1,6 +1,7 @@
 import React from 'react';
 import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
-import TodoApp from './src/components/TodoApp';
+import TodoApp from './components/TodoApp';
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 function App(): React.JSX.Element {
@@ -22,4 +23,4 @@ function App(): React.JSX.Element {
     </SafeAreaView>
   );
 }
-export default App;
+export default gestureHandlerRootHOC(App);

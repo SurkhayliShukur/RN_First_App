@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   Modal,
   View,
@@ -31,11 +31,11 @@ const TodoAddModal: React.FC<DeleteModalProps> = ({
     }
     const newTodo = {
       id: Date.now(),
-      text: title,
+      title,
       completed: false,
     };
-
     onConfirm?.(newTodo);
+    setTitle('');
   };
 
   return (
@@ -46,20 +46,18 @@ const TodoAddModal: React.FC<DeleteModalProps> = ({
           <TextInput
             placeholder="Enter todo title"
             value={title}
-            onChangeText={(t) => setTitle(t)}
+            onChangeText={t => setTitle(t)}
             style={styles.input}
           />
           <View style={styles.buttonRow}>
             <TouchableOpacity
               style={[styles.button, styles.cancel]}
-              onPress={onCancel}
-            >
+              onPress={onCancel}>
               <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.delete]}
-              onPress={handleSubmit}
-            >
+              onPress={handleSubmit}>
               <Text style={styles.buttonText}>Save</Text>
             </TouchableOpacity>
           </View>
@@ -114,7 +112,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ccc',
   },
   delete: {
-    backgroundColor: '#d07dd9',
+    backgroundColor: '#1DCD9F',
   },
   buttonText: {
     color: '#fff',

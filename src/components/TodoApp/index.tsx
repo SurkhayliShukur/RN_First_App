@@ -1,55 +1,71 @@
-//import liraries
-import React, {useState, useCallback} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import {FlashList, ListRenderItem} from '@shopify/flash-list';
-import {Task} from '../../interface/index';
-import LocalStorage from '../../store/localStorage';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Pressable,
+} from 'react-native';
+import React, { useCallback } from 'react';
+import { FlashList, ListRenderItem } from '@shopify/flash-list';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import LocalStorage from '../../store/localStorage';
+import { Task } from '../../interface';
 import TodoAddModal from './TodoAddModal';
 
-const TodoApp = () => {
-  const [tasks, setTasks] = useState(LocalStorage.getItem('todos') || []);
-  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const handleAddTask = (task: Task) => {
-    const newTask = [...tasks, task];
-    setTasks(newTask);
-    LocalStorage.setItem('todos', newTask);
+const TodoApp = () => {
+  const [todos, setTodos] = React.useState<Task[]>(LocalStorage.getItem('todos') || []);
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
+
+  const handleAddTodo = (todo: Task) => {
+    const newTodos = [...todos, todo];
+    setTodos(newTodos);
+    LocalStorage.setItem('todos', newTodos);
     setIsModalVisible(false);
   };
 
   const handleDelete = (id: number) => {
-    const newTask = tasks.filter((task: Task) => task.id !== id);
-    setTasks(newTask);
-    LocalStorage.setItem('todos', newTask);
+    const newTodos = todos.filter((todo: Task) => todo.id !== id);
+    setTodos(newTodos);
+    LocalStorage.setItem('todos', newTodos);
   };
+
+
+
+    const handleDone = (id: number) => {
+      const newTodos = todos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      );
+      setTodos(newTodos);
+      LocalStorage.setItem('todos', newTodos);
+    };
 
   const renderRightActions = useCallback((id: number) => {
     return (
       <>
+        <TouchableOpacity style={styles.doneBtn} onPress={() => handleDone(id)}>
+          <Text style={{ color: 'white' }}>done</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.delBtn}
-          onPress={() => handleDelete(id)}>
-          <Text style={{color: 'white'}}>delete</Text>
+          onPress={() => handleDelete(id)}
+        >
+          <Text style={{ color: 'white' }}>del</Text>
         </TouchableOpacity>
       </>
     );
   }, []);
 
   const renderItem: ListRenderItem<Task> = useCallback(
-    ({item}) => {
-      if (!item || !item.text) return null;
-  
-      return (
-        <Swipeable renderRightActions={() => renderRightActions(item.id)}>
-          <View style={styles.item}>
-            <Text>{item.text}</Text>
-            <Text>{item.completed ? 'Completed' : 'Not Completed'}</Text>
-          </View>
-        </Swipeable>
-      );
-    },
-    [tasks],
+    ({ item }) => (
+      <Swipeable renderRightActions={() => renderRightActions(item.id)}>
+        <View style={styles.item}>
+          <Text style={styles.todo_title}>{item.title}</Text>
+          <Text>{item.completed ? 'Completed' : 'Not Completed'}</Text>
+        </View>
+      </Swipeable>
+    ),
+    [todos]
   );
 
   return (
@@ -57,64 +73,71 @@ const TodoApp = () => {
       <TodoAddModal
         visible={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
-        onConfirm={handleAddTask}
+        onConfirm={handleAddTodo}
       />
       <FlashList
         ListHeaderComponent={() => (
           <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-            <Text style={styles.text}>Todo app +</Text>
+            <Text style={styles.title}>Todo app +</Text>
           </TouchableOpacity>
         )}
-        data={tasks}
+        data={todos}
         estimatedItemSize={50}
         renderItem={renderItem}
-        ListEmptyComponent={() => <Text style={styles.text}>No todos</Text>}
+        ListEmptyComponent={() => <Text style={styles.title}>No todos</Text>}
       />
     </View>
   );
 };
 
+export default TodoApp;
+
 const styles = StyleSheet.create({
-  container: {flex: 1, padding: 20, paddingTop: 50},
-  heading: {
-    fontSize: 26,
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+
+  title: {
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 15,
+    color: 'black',
     textAlign: 'center',
-    color: '#3e2f5b',
+    paddingBottom: 20,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: '#e0d4f7',
-    backgroundColor: '#fff',
-    padding: 10,
-    borderRadius: 8,
+
+  todo_title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'black',
   },
+
   item: {
-    flexDirection: 'column',
-    marginVertical: 6,
-    height: 50,
-    width: '100%',
-    padding:12,
-    backgroundColor: '#f4f0fa',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: {width: 0, height: 2},
-    elevation: 2,
-  },
-  text: {fontSize: 32, color: '#2d2d2d', textAlign: 'center'},
-  completed: {textDecorationLine: 'line-through', color: '#888'},
-  delBtn: {
-    height: 50,
-    width: 50,
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    backgroundColor: '#DDDDDD',
     borderRadius: 10,
     marginTop: 10,
-    backgroundColor: 'red',
+  },
+
+  delBtn: {
+    height: 70,
+    width: 70,
+    borderRadius: 10,
+    marginTop: 10,
+    backgroundColor: '#CB0404',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  doneBtn: {
+    height: 70,
+    width: 70,
+    borderRadius: 10,
+    marginTop: 10,
+    marginLeft:10,
+    backgroundColor: '#1F7D53',
     justifyContent: 'center',
     alignItems: 'center',
   },
 });
-
-//make this component available to the app
-export default TodoApp;

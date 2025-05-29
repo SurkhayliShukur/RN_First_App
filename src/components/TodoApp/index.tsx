@@ -5,16 +5,15 @@ import {
   TouchableOpacity,
   Pressable,
 } from 'react-native';
-import React, { useCallback } from 'react';
-import { FlashList, ListRenderItem } from '@shopify/flash-list';
+import React, {useCallback} from 'react';
+import {FlashList, ListRenderItem} from '@shopify/flash-list';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import LocalStorage from '../../store/localStorage';
-import { Task } from '../../interface';
+import {Task} from '../../interface';
 import TodoAddModal from './TodoAddModal';
 
-
 const TodoApp = () => {
-  const [todos, setTodos] = React.useState<Task[]>(LocalStorage.getItem('todos') || []);
+  const [todos, setTodos] = React.useState(LocalStorage.getItem('todos') || []);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
 
   const handleAddTodo = (todo: Task) => {
@@ -30,34 +29,36 @@ const TodoApp = () => {
     LocalStorage.setItem('todos', newTodos);
   };
 
-
-
-    const handleDone = (id: number) => {
-      const newTodos = todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      );
-      setTodos(newTodos);
-      LocalStorage.setItem('todos', newTodos);
-    };
-
-  const renderRightActions = useCallback((id: number) => {
-    return (
-      <>
-        <TouchableOpacity style={styles.doneBtn} onPress={() => handleDone(id)}>
-          <Text style={{ color: 'white' }}>done</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.delBtn}
-          onPress={() => handleDelete(id)}
-        >
-          <Text style={{ color: 'white' }}>del</Text>
-        </TouchableOpacity>
-      </>
+  const handleDone = (id: number) => {
+    const newTodos: Task[] = todos.map((todo: Task) =>
+      todo.id === id ? {...todo, completed: !todo.completed} : todo,
     );
-  }, []);
+    setTodos(newTodos);
+    LocalStorage.setItem('todos', newTodos);
+  };
+
+  const renderRightActions = useCallback(
+    (id: number) => {
+      return (
+        <>
+          <TouchableOpacity
+            style={styles.doneBtn}
+            onPress={() => handleDone(id)}>
+            <Text style={{color: 'white'}}>done</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.delBtn}
+            onPress={() => handleDelete(id)}>
+            <Text style={{color: 'white'}}>del</Text>
+          </TouchableOpacity>
+        </>
+      );
+    },
+    [handleDelete, handleDone],
+  );
 
   const renderItem: ListRenderItem<Task> = useCallback(
-    ({ item }) => (
+    ({item}) => (
       <Swipeable renderRightActions={() => renderRightActions(item.id)}>
         <View style={styles.item}>
           <Text style={styles.todo_title}>{item.title}</Text>
@@ -65,7 +66,7 @@ const TodoApp = () => {
         </View>
       </Swipeable>
     ),
-    [todos]
+    [todos],
   );
 
   return (
@@ -104,6 +105,7 @@ const styles = StyleSheet.create({
     color: 'black',
     textAlign: 'center',
     paddingBottom: 20,
+    fontFamily: 'Poppins',
   },
 
   todo_title: {
@@ -135,7 +137,7 @@ const styles = StyleSheet.create({
     width: 70,
     borderRadius: 10,
     marginTop: 10,
-    marginLeft:10,
+    marginLeft: 10,
     backgroundColor: '#1F7D53',
     justifyContent: 'center',
     alignItems: 'center',

@@ -12,6 +12,7 @@
     "ios-upt": "cd ios && pod install && pod update && cd ..",
     "apk": "cd android && ./gradlew assembleRelease && cd .. && cp ./android/app/build/outputs/apk/release/app-release.apk ./my_app_$(date +'%d_%m_%Y-%H:%M').apk",
     "start-watchman": "watchman watch-del '.' && watchman watch-project '.' && react-native start",
+    "generate-splash": "npx react-native-bootsplash generate --platforms android,ios src/assets/images/logo.png  ",
     "test": "jest"
   },
   "dependencies": {
